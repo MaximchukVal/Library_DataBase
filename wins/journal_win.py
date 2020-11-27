@@ -1,9 +1,19 @@
+from PyQt5.QtCore import QSize, Qt
+from PyQt5.QtGui import QIcon
+from PyQt5.QtWidgets import QWidget, QTableWidget, QTableWidgetItem, QVBoxLayout, QScrollArea, QPushButton
+
+from wins.actions import act_borrow_win, act_return_win
+from wins.clients import client_list_win
+from wins.books import book_list_win
+from wins.types import type_list_win
+
+
 class JournalWindow(QWidget):
     def __init__(self, con):
         super().__init__()
         self.con = con
-        self.borrowBook = BorrowBookWindow(self.con)
-        self.returnBook = ReturnBookWindow(self.con)
+        self.borrowBook = act_borrow_win.BorrowBookWindow(self.con)
+        self.returnBook = act_return_win.ReturnBookWindow(self.con)
         self.initUI()
 
     def initUI(self):
@@ -81,20 +91,20 @@ class JournalWindow(QWidget):
         statBtn.setToolTip('Show procedures')
         statBtn.resize(QSize(120, 40))
         statBtn.move(650, 330)
-        #statBtn.clicked.connect(self.ProcButtonClicked)
+#       statBtn.clicked.connect(self.ProcButtonClicked)
 
         self.show()
 
     def ClientButtonClicked(self):
-        self.clientWindow = ClientWindow(self.con)
+        self.clientWindow = client_list_win.ClientWindow(self.con)
         self.close()
 
     def BookButtonClicked(self):
-        self.bookWindow = BooksWindow(self.con)
+        self.bookWindow = book_list_win.BooksWindow(self.con)
         self.close()
 
     def BookTypeButtonClicked(self):
-        self.booktypeWindow = BookTypeWindow(self.con)
+        self.booktypeWindow = type_list_win.BookTypeWindow(self.con)
         self.close()
 
     def BorrowButtonClicked(self):

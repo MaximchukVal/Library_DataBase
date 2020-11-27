@@ -1,20 +1,14 @@
-from PyQt5.QtWidgets import *
-from PyQt5.QtGui import *
-from PyQt5.QtCore import *
+import journal_win
 
-from PyQt5.QtWidgets import QApplication, QGridLayout, QWidget, QPushButton, QToolTip, QLabel, QComboBox, QLineEdit, QErrorMessage, QMessageBox, QRadioButton, QGroupBox, QVBoxLayout
+from PyQt5.QtWidgets import QApplication, QWidget, QPushButton, QLabel, QLineEdit, QMessageBox
 from PyQt5.QtGui import *
-from PyQt5.QtCore import *
-import Connect
-import startWindow
-import sys
-import FirstWindow
-import all_windows
-import actionsWindow
+
 
 class EnterWindow(QWidget):
-    def __init__(self):
+    def __init__(self, con):
         super().__init__()
+        self.con = con
+
         self.setGeometry(600, 200, 300, 160)
         self.setFixedSize(self.size())
         self.setWindowTitle('Logging in')
@@ -38,8 +32,8 @@ class EnterWindow(QWidget):
         self.show()
 
     def enterClicked(self):
-        login = 'C##VALENTIN'#self.lgnEdit.text()
-        password = 'oracle' #self.pswEdit.text()
+        login = self.lgnEdit.text()
+        password = self.pswEdit.text()
         if len(login) == 0 or len(password) == 0:
             error_d = QMessageBox()
             error_d.setIcon(QMessageBox.Critical)
@@ -49,7 +43,7 @@ class EnterWindow(QWidget):
             return
         else:
             try:
-                con = Connect.getDBconnection(login, password)
+                con = self.con.getDBconnection(login, password)
             except:
                 error_d = QMessageBox()
                 error_d.setIcon(QMessageBox.Critical)
@@ -58,10 +52,5 @@ class EnterWindow(QWidget):
                 error_d.exec_()
                 return
             print("Connection is successful")
-            self.startWindow = all_windows.Journal_win(con)
+            self.startWindow = journal_win.Journal_win(self.con)
             self.close()
-
-if __name__ == '__main__':
-    app = QApplication(sys.argv)
-    enterWindow = EnterWindow()
-    sys.exit(app.exec_())
